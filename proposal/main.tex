@@ -1,0 +1,106 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{makecell}
+\usepackage[left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry} % Anpassung der Seitenränder
+\usepackage{titlesec} % Für benutzerdefinierte Überschriftenstile
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{attachfile}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage[table]{xcolor}
+\usepackage{fancyvrb}
+\usepackage{listings}
+
+\newcommand{\nextparagraph}{\vspace{2mm} \noindent}
+\newcommand{\TODO}{\colorbox{red!20}{\textcolor{red}{\textbf{TODO}}}}
+\newcommand{\oneitem}[1]{%
+  \begin{itemize}
+    \item #1
+  \end{itemize}
+}
+
+
+
+\lstset{
+  inputencoding=utf8,
+  extendedchars=true,
+  literate={ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1 {ß}{{\ss}}1,
+  basicstyle=\ttfamily,
+  breaklines=true,   
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+\hypersetup{pdfborder = {0 0 0}}
+
+\pagestyle{fancy}
+
+\graphicspath{ {./images/} }
+
+\renewcommand{\headrule}{}
+% Definieren Sie benutzerdefinierte Formate für Abschnittsüberschriften
+\titleformat*{\section}{\Large\bfseries}
+\titleformat*{\subsection}{\normalsize\bfseries}
+
+% Entfernen Sie die Nummerierung von Abschnittsüberschriften
+% \setcounter{secnumdepth}{0}
+
+% Einstellung des Zeilenabstands
+\linespread{1.15}
+
+\setlength{\headheight}{30pt}
+
+\begin{document}
+\fancyhead{}
+\fancyhead[L]{\textcolor{gray}{Artificial Intelligence \& Machine Learning}}
+\fancyhead[C]{\textcolor{gray}{}}
+\fancyhead[R]{\textcolor{gray}{Hofer, Tschöscher, Wobak}}
+
+\begin{titlepage}
+  \begin{center}
+    \vspace*{1cm}
+    \includegraphics[width=0.4\textwidth]{images/KLU-logox.png}
+
+    \vspace{2cm}
+
+    {\Huge \textbf{Intrusion Detection Systems}}
+
+    \vspace{0.8cm}
+    {\huge \textbf{Project Proposal}}
+
+    \vspace{0.8cm}
+    {\LARGE \textbf{Artificial Intelligence \& Machine Learning}}
+
+    \vspace{2cm}
+
+    \begin{tabular}{c}
+        \Large \textbf{Authors:} Hofer Laura, Tschöscher Lisa, Wobak Thomas
+        \\[0.5cm]
+        \Large \textbf{Date:} \today
+    \end{tabular}
+  \end{center}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+
+\include{sub/motivation}
+\include{sub/learning_task}
+\include{sub/related_work}
+\include{sub/plan}
+\include{sub/risk_management}
+
+
+\newpage
+\bibliographystyle{plain}
+\addcontentsline{toc}{chapter}{References}  
+\bibliography{reference}
+
+\end{document}
