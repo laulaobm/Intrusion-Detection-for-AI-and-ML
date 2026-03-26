@@ -3,5 +3,44 @@
 \TODO{LAURA}
 \TODO{LISA}
 
+\textbf{\textit{An Empirical Study on Utilizing Online K-Means Clustering for Intrusion Detection}}
+
+This paper \cite{10215737} addresses the problem of intrusion detection in network traffic. It focuses on two main aspects: \emph{online streaming environments} and \emph{highly imbalanced datasets}. 
+The authors emphasize the challenge, that traditional machine learning methods require labeled data and access to the full dataset, whereas in real network traffic, data often arrives sequentially and without labels.
+The proposed approach is an unsupervised learning method using online K-Means clustering, which proceesses data sequentially. 
+\begin{itemize}
+    \item Similar data points are grouped using \emph{Euclidean distance}.
+    \item The model dynamically creates cluster centers and assigns new data points to the nearest center.
+\end{itemize}
+
+This approach enables real-time operation in environments where data arrives sequentially. For evaluation, the authors use the \emph{Kitsune dataset (IoT network traffic)} containing different attack types and 116 features. The data is first normalized via \emph{min-max normalization} (0–1 scaling) during preprocessing. Then the online K-Means algorithm is applied. The steps of the algorithm are:
+
+\begin{enumerate}
+    \item Initialization of the first $k$ incoming data points as initial cluster centers.
+    \item Processing of each new data point:
+    \begin{itemize}
+        \item Calculate the Euclidean distance $D(v,C)$ between the new point $v$ and all existing cluster centers $C$.
+        \item Determine the probability $p = \min(D(v,C)^2 / f_r, 1)$ of creating a new cluster center for $v$, where $f_r$ is a parameter controlling cluster growth.
+        \item With probability $p$, $v$ becomes a new cluster center; otherwise, assign $v$ to the nearest existing center.
+        \item Updating the cluster – the assigned cluster center may be updated incrementally if new points are added.
+    \end{itemize}
+    \item Output: clusters grow dynamically over time.
+\end{enumerate}
+
+Key findings of this study include:
+\begin{itemize}
+    \item Online K-Means performs almost as well as offline K-Means.
+    \item Normalization significantly improves performance.
+    \item Cluster purity for normal and attack traffic was 99\%, respectively.
+    \item The F1 score amounts to 99\% for normal behavior and 94\% for attacks.
+\end{itemize}
+
+This approach can also be applied to the chosen \emph{UNSW-NB15} dataset, as both datasets represent network traffic, contain different behaviors, and have enough features for K-Means clustering.
+
+
+
+
+
+
 \cite{5999520}
 \cite{wu2022intrusion}
