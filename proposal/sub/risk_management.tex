@@ -1,7 +1,23 @@
 \section{Risk Management}
-\TODO{LAURA}
-\begin{itemize}
-    \item NSL-KDD dataset -> from other paper
-    \item + benefits/differences to UNSW-NB15 dataset
-    \item alternative models: simpler form, naive bayes, decision tree etc. (other examples from notebooks from datasets)
-\end{itemize}
+The greatest risk for our projects lies in the given dataset. Namely UNSW\_NB15 \cite{UNSW}, which could show signs of bad data-quality or introduces problems during data preparation and preprocessing. Since we chose to use datasets that were discussed and worked with in different papers, we are confident it will work for our purposes. Nevertheless, we also investigated in two alternative datasets: NSL-KDD \cite{NSL} and CSE-CIC-IDS 2018\cite{CSE}. These datasets show better Kaggle ratings, which can be seen in Figure~\ref{fig:kaggle} and suggest various notebooks as does UNSW\_NB15. It is evident, that UNSW\_NB15 shows the most downloads on Kaggle, which is why we decided on this dataset apart from papers referencing it. In conclusion, those alternative datasets were also mentioned in \cite{SVM} and \cite{wu2022intrusion}, which give us the confidence to find adequate input data eventually, even if UNSW\_NB15 does not suffice. 
+
+
+\nextparagraph
+\begin{figure}[htbp]
+    \centering
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Dataset} & \textbf{Usability} & \textbf{Downloads} & \textbf{Columns} \\
+        \midrule
+        NSL-KDD & 6.25& 87900 & 42 \\
+        UNSW\_NB15 & 5.29 & 174000 & 45 \\
+        CSE-CIC-IDS2018 & 9.71 & 42900 & 80 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Dataset Comparison from Kaggle}
+    \label{fig:kaggle}
+\end{figure}
+
+
+\nextparagraph
+If issues occur with the approaches chosen for the models, we plan to simplify the architecture. For instance, we would use standard SVM instead of M-MultiSVM or only include promising parts. Alternatively, IDS models can be trained with various methods as described in \cite{abdulganiyu2023systematic} and \cite{saranya2020performance}, which gives us many opportunities for different approaches and models. This is why we plan to change to other methods such as Decision Tree or Logical Regression if any issues occur when training and testing the model we aim to implement.
