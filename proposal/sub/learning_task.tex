@@ -5,6 +5,158 @@
 % https://www.kaggle.com/datasets/mrwellsdavid/unsw-nb15?select=UNSW_NB15_training-set.csv
 % https://www.kaggle.com/datasets/hassan06/nslkdd?select=index.html
 
+
+For this project we are going to use the "UNSW\_NB15" dataset \cite{unsw_nb15} which can be found on Kaggle. This data set was used to train and test various systems in order to detect hacking or malicious activity. 
+The data set was chosen based on the contained features and the fact that it was used in various papers like \cite{10.1016/j.jnca.2024.103925} and \cite{10.1016/j.jksuci.2024.102164}. Furthermore the same dataset can be found in different Kaggle notebooks, which are also covering intrusion and threat detection. The following notebooks use the same dataset:
+
+\begin{itemize}
+    \item \href{https://www.kaggle.com/code/getanmolgupta01/unsw-nb15-cybersecurity-threat-detection-ann/notebook}{UNSW\_NB15 | Cybersecurity Threat Detection | ANN} \cite{unsw_nb15_ann_notebook}
+    \item \href{https://www.kaggle.com/code/akritiupadhyayks/cyber-attack-detection-with-random-forest}{Cyber Attack Detection with Random Forest} \cite{cyber_attack_rf_notebook}
+\end{itemize}
+
+
+
+The data in the set was collected by the Cyber Range Lab of the Australian Centre for Cyber Security (ACCS). They used the tcpdump tool and captured 100 GB of raw network traffic. The set includes 9 different types of attacks:
+
+\begin{enumerate}
+    \item Fuzzers (sending random data to break systems)
+    \item Analysis (scanning for weaknesses)
+    \item Backdoors (secret hidden access)
+    \item DoS (flooding a system to crash it)
+    \item Exploits (using known bugs to attack a system)
+    \item General attacks (general cryptographic attacks)
+    \item Reconnaissance (spying the network)
+    \item Shellcode (injecting malicious code)
+    \item Worms (self-spreading malware)
+\end{enumerate}
+
+
+
+The data was collected by simulating normal activities (browsing, emails, downloads) and fake attacks.  IXIA PerfectStorm was used to generate realistic network traffic including normal traffic and attacks, which were then recorded via tcpdump. Using Argus \& Bro-IDS the raw data was turned into meaningful features. In total the dataset contains 49 features which are described in UNSW-NB15\_features.csv. The features describe network traffic behavior between two endpoints, and each record represents one connection and describes the following aspects of the communication:
+
+\begin{itemize}
+    \item \textbf{Basic connection information}
+    \begin{itemize}
+        \item Source and destination IP addresses
+        \item Source and destination Ports´
+        \item Protocol type
+        \item Service type
+    \end{itemize}
+
+    \item \textbf{Time-based features}
+    \begin{itemize}
+        \item Connection duration
+        \item Start and end time
+        \item Time gaps between packages
+    \end{itemize}
+
+    \item \textbf{Traffic volume feature}
+    \begin{itemize}
+        \item Bytes sent and received
+        \item Packet counts
+        \item Data transfer rates (in bits per second)
+    \end{itemize}
+
+    \item \textbf{Packet characteristics}
+    \begin{itemize}
+        \item Average packet sizes
+        \item Packet timing
+        \item Packet intervals
+    \end{itemize}
+
+    \item \textbf{Reliability and loss metrics}
+    \begin{itemize}
+        \item Packet loss and retransmissions
+        \item Flow stability indicators
+    \end{itemize}
+
+    \item \textbf{Network-level indicators}
+    \begin{itemize}
+        \item Time-To-Live values
+        \item Routing related behavior
+    \end{itemize}
+
+    \item \textbf{TCP-Specific features}
+    \begin{itemize}
+        \item TCP window sizes
+        \item Sequence numbers
+    \end{itemize}
+
+    \item \textbf{Application level features}
+    \begin{itemize}
+        \item HTTP transaction depth
+        \item Response body size
+    \end{itemize}
+\end{itemize}
+
+Each record has a binary label, 0 indicates normal network traffic and 1 marks an attack.
+In total there is a number of 540,044 records which are stored in the following files: UNSW-NB15\_1.csv, UNSW-NB15\_2.csv, UNSW-NB15\_3.csv and UNSW-NB15\_4.csv. Each row of these files contains all of the 49 features.
+
+\begin{figure}[h]  
+    \centering
+    \includegraphics[width=0.6\textwidth]{proposal/images/Row_example.png} 
+    \caption{Example row of the dataset}
+    \label{fig:meinbild}
+\end{figure}
+
+The given picture shows a part of a row in the dataset. The following information can be derived from this row:
+
+\begin{itemize}
+    \item Source IP address: 59.166.0.0
+    \item Source port number: 33661
+    \item Destination IP address: 149.171.126.9
+    \item Destination port number: 1024
+    \item Protocol: udp
+    \item State: CON
+\end{itemize}
+
+A partition from this dataset is used as a training set (175.341 entries, UNSW\_NB15\_training-set.csv) and another one is used as testing set (82,332 entries, UNSW\_NB15\_testing-set.csv). The training set was used to teach the model and the testing set includes different attack types and normal rows to check how well the model is trained. 
+
+
+\subsubsection{Attack catgories and recognigtion}
+
+The dataset can be used to recognize different attacks, using the given features. Each attack type has a specific behavior which can be detected in the network using patterns and a combination of features. In the following we provide some examples on how the attacks could be discovered by the models:\\
+
+\textbf{DoS (Denial of Service)}\\
+Such attacks can often be recognized by the flood of network traffic which is produced during the attack. Taking a look at features like \texttt{sload} and \texttt{dload}, which represent the bits per second could point out extremely high traffic rates. Apart from that, the number of exchanged packages (\texttt{spkts, dpkts}) and the data volume (\texttt{sbytes, dbytes}) are able to indicate a Denial of Service attack. Finally an increased number of packet loss (\texttt{sloss, dloss}) is also a hint for malicious behavior.\\
+
+\textbf{Reconnaissance (Scanning)}\\
+This attack aims to find weaknesses in the network. Therefore, the network needs to be scanned, which could be recognized via very short connections (\texttt{dur}), sending very few packets (\texttt{spkts}), the usage of many different ports (\texttt{dsport}), unknown services (\texttt{service}), or very small intervals of connections (\texttt{sintpkt}).\\
+
+\textbf{Exploits}\\
+The main aim behind such an attack is to use vulnerabilities to gain access to a network.  Some indicators for exploits could be the usage of HTTP, FTP or vulnerable services (\texttt{service}),  very complex and unusual requests (\texttt{trans\_depth}), abnormal response sizes (\texttt{res\_bdy\_len}) or unusual session behavior (\texttt{state}).\\
+
+\textbf{Worms}\\
+Worms are malware and have the characteristic, that they are self-spreading across the machine/network. This property can be used to recognize them. Considering the destination IP addresses (\texttt{dstip}) it could be suspicious if there are many different destinations. Furthermore repeated connections (\texttt{spkts, dpkts}) or short repeated session (\texttt{dur}) are also indicators for worms. Considering the bit rate from the source (\texttt{sload}), a consistent outgoing traffic could also be a indicator for such malware.\\
+
+\textbf{Backdoors}\\
+With backdoors, attackers gain hidden access to a system. To detect this type of attack it could be useful to take a look at long lasting connections (\texttt{dur}), unusual or rare services (\texttt{service}) and persistent connections (\texttt{state}).\\
+
+\textbf{Fuzzers}\\
+Fuzzers are used to send random data to break systems. Looking at irregular size traffic (\texttt{sbytes, dbytes}), inconsistent packet sizes (\texttt{smeanz, dmeansz}) or many failed or abnormal states is important in order to detect fuzzers.\\
+
+\textbf{Analysis}\\
+Considering this attack, the main goal of the hacker is to study the system behavior. Therefore, the system needs to be scanned. Such scanning could be detected by longer network connections (\texttt{dur}) or moderate interaction (\texttt{trans\_depth}).\\
+
+\textbf{Shell code}\\
+In order to detect malicious code in the network, it is necessary to take a look at payload-heavy requests (\texttt{sbytes}), small or unusual responses (\texttt{dbytes}), services like HTTP and unusual payload sizes (\texttt{res\_bdy\_len}).\\
+
+\textbf{Generic Attacks}\\
+Discovering cryptographic attacks or brute-force attacks can be done with looking at the following properties: high consistent traffic (\texttt{sload, dload}), many repeated attemps (\texttt{spkts}), repetitive sessions (\texttt{dur}) and repeated connection attempts (state).\\
+
+
+\subsubsection{Alternative dataset}
+In general, we will focus on the previous mentioned UNSW\_NB15 dataset for our project. In case the data quality is not as good as we assumed or we need more training/testing data we chose the NSL-KDD dataset \cite{nsl_kdd_dataset} from Kaggle as an alternative. This data set is also used for network intrusion detection and contains simulated network traffic records. The dataset is provided in two formats:
+\begin{itemize}
+    \item ARFF (structured format)
+    \item TXT/CSV files
+\end{itemize}
+
+This dataset is also divided in training data (KDDTrain+) and testing data (KDDTest+).
+Each row represents a single connection and includes different features like duration, protocol\_type, service and number of failed logs. Furthermore, the attack types (DoS, Probe, R2L, U2R, normal behavior, etc.) are also given in each row. \\
+
+
+
 \begin{itemize}
     \item UNSW-NB15 dataset choice (specify for training and testing)
     \item alternative: NSL-KDD dataset
