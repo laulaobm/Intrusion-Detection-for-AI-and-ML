@@ -21,10 +21,21 @@
 \end{itemize}
 
 \subsection{Performance Measure}
-\TODO{LAURA}
-\begin{itemize}
-    \item Accuracy
-    \item Recall
-    \item Precision
-    \item F1-Score
-\end{itemize}
+To evaluate the performance of the trained models, we consider different metrics that have been already applied by researcher in numerous papers concerning intrusion detection. Primarily, we derived our metrics for the comparison from \cite{SVM}
+
+\nextparagraph
+First and foremost, the models will be compared to each other with the \textbf{Accuracy}, where the number of successfully recognized anomalies in network traffic is divided by the total number of predictions.
+
+\nextparagraph
+With the \textbf{Precision} the number of rightfully identified attacks are compared to the total number of traffic examples classified as an attack to demonstrate the ratio, to which an attack is rightfully classified. To further evaluate the correct recognition of truly positive attacks, the \textbf{Recall} compares the true positives with the number of true positives and false negatives. The trade-off between these to metrics will then be analyzed with the \textbf{F1 score}. 
+
+\nextparagraph
+To get more information on falsely classified attacks, the \textbf{False Positive Rate (FPR)} as well as \textbf{Matthews Correlation Coefficient (MCC)}, \textbf{Detection Rate (DR)} and \textbf{False Alarm Rate (FAR)} are considered. With this metrics, the potential flaws and limitations of the models should be derivable.
+
+\nextparagraph
+Our goal is to reach comparable results with our models to the papers that inspired our approaches, since our goal is to compare the approaches with the same input data respectively. Therefore the \textbf{DR} should be below 0.150 and all other metrics should be $>=$90\%, or better still, over 95\%.
+
+% The most employed metrics in assessment of anomaly-based
+% IDS include accuracy, recall, precision, false-positive rate
+% (FPR), also regarded as false alarm rate (FAR), f- measure, false-negative rate (FNR), and true-positive rate (TPR)
+% (Fig. 4). 
