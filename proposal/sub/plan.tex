@@ -2,6 +2,14 @@
 \TODO{THOMAS}
 \TODO{LAURA}
 \TODO{LISA}
+
+In this project Lisa Tschöscher will focus on applying k-means clustering on the data set, to recognize attacks in network traffic. The approach will be similar like in \cite{10215737}.
+In order to apply  k-means clustering on the chosen dataset the data is going to be preprocessed. Therefore categorical features like IP addresses, protocol, etc. are encoded and normalized (via min-max scaling) because k-means clustering needs numerical values. The training of the model will be mainly done with offline clustering due to the fact that the chosen dataset only provides static data. In addition we will try to simulate streaming data via streaming the dataset one data point at a time into the algorithm. This is done in order to test the online k-means clustering approach of the paper.
+With clustering the input data is going to be partioned into different clusters which indicate whether a data row is normal traffic or attack traffic. Using performance measures like F1-score and precision the results will be evaluated.
+
+
+
+
 \begin{itemize}
     \item for each model: data preprocessing, training, evaluation (grob)
     \item input -> output ?
