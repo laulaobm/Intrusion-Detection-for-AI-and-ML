@@ -1,7 +1,11 @@
 \section{Related Work}
-\TODO{THOMAS}
-\TODO{LAURA}
-\TODO{LISA}
+Since numerous approaches to train ML learning models have been discussed in recent years, multiple surveys and literature reviews summarize different approaches and models and compare them \cite{abdulganiyu2023systematic} \cite{al2021intrusion} \cite{saranya2020performance} \cite{sowmya2023comprehensive}. Due to this variety of models and previous evaluations of different ML methods, this related work section focuses on concrete approaches that our group aims to evaluate and implement in parts.
 
-\cite{5999520}
-\cite{wu2022intrusion}
+\nextparagraph
+Turukmane and Devendiran \cite{SVM} introduce a hybrid machine learning model called 'Mud Ring
+assisted multilayer support vector machine (M-MultiSVM)', which addresses some limitations of ML models for IDS, which are also mentioned in \cite{al2021intrusion}. Namely, the authors apply Advanced Synthetic Minority Oversampling Technique (ASMOT) to address the class imbalance problem, favouring the majority class, and handle null values as well as unnormalized data with a Min-Max normalization beforehand. After that, the feature extraction is supported by Modified Singular value decomposition (M-SvD) to filter for basic, content and traffic features from the balanced input data. To further determine the optimal features, the Opposition learning-based Northern Goshawk optimization (ONgO) is applied, where necessary values for the attack classification are selected as well as improving the speed of convergence with Opposition-based learning. Finally, the hybrid Mud ring assisted multilayer support vector machine model can be trained with optimized, balanced and selected features. The classifier uses the traditional SVM techniques combined with an optimized hyperparameter created with the Mud Ring optimization. With a combination of the CIC-IDS 2018 and UNSW-NB15 dataset, the trained model is compared to standard ML models such as XGBoost or Logical Regression by evaluating performance measures such as accuracy, precision, recall, F1 score, False positive rate (FPR), Matthews correlation coefficient (MCC), Detection Rate, False Alarm Rate (FAR) and Specificity. The results show, that M-MultiSVM outperforms other approaches for almost every performance measure \cite{SVM}.
+
+% multiSVm in Schichten, wichtig!!
+
+% \cite{5999520}
+% \cite{wu2022intrusion}
