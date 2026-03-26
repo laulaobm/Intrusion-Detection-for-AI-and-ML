@@ -1,9 +1,24 @@
 \section{Plan}
-\TODO{THOMAS}
-\TODO{LAURA}
-\TODO{LISA}
-\begin{itemize}
-    \item for each model: data preprocessing, training, evaluation (grob)
-    \item input -> output ?
-    \item link to papers/related work (e.g. extension? comparison?)
-\end{itemize}
+
+\subsection{SVM-based approach - Hofer}
+Inspired from Turukmane and Devendiran \cite{SVM}, I'v decided to keep some of the basic architecture of the M-MultiSVM, but replace the used methods with less mathematical ones.
+
+\subsection{Dataset}
+Since our group decided to use the UNSW-NB15\cite{UNSW} dataset, this project will only use one dataset compared to \cite{SVM} and focus more on Data Preprocessing and another hybrid model.
+
+\subsubsection{Data Preprocessing}
+Therefore, the class imbalance problem will be treated with SMOTE to reduce complexity.
+To extract important features, Random Forest will be used to form a basis for the hybrid model. 
+
+\subsubsection{Hybrid Model}
+nur SVM mit RF (soft voting)
+%https://link.springer.com/article/10.1007/s40009-023-01223-0
+
+% \TODO{THOMAS}
+% \TODO{LAURA}
+% \TODO{LISA}
+% \begin{itemize}
+%     \item for each model: data preprocessing, training, evaluation (grob)
+%     \item input -> output ?
+%     \item link to papers/related work (e.g. extension? comparison?)
+% \end{itemize}
