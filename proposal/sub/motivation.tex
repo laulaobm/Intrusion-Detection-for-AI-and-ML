@@ -1,18 +1,18 @@
 \section{Motivation}
-\TODO{THOMAS}
-
 The internet has been around for a long time now, and there is still an ongoing war between hackers and security experts. 
 Current network security measures are not sufficient to protect against all types of cyber attacks, and there is a need for newer solutions.
-\nextparagraph
-This is why there is a growing interest in the field of cybersecurity in using Machine Learning (ML) techniques to automatically detect and prevent certain types of cyber attacks. Since we study in the field of Computer Science and are generally interested in data security, we naturally hear a lot about different cyber attacks happening worldwide, like the recent Deezer attack \cite{purplesec_deezer_data_leak} that saw the data of 228 million users being leaked. 
-\nextparagraph
-However, detecting cyber attacks is not a simple task, and there are a lot of different types of attacks, each with their own characteristics and patterns. We already learned about some of these attacks in some of the courses we all took, like ``System Security'', but we wanted to learn more about how to automatically detect these attacks using ML approaches. We are all interested in the inner functioning of an Intrusion Detection System (IDS), and we want to learn more about how to build one using ML techniques.
 
-Unfortunately, there is no single solution to detect all kinds of attacks, and more sophisticated attack patterns are emerging every day. But there are still general patterns found among similar types of attacks, and those can be detected using ML techniques. There is already a lot of research being done in this field and many promising results are being shown, but there is still a lot of work to be done and new attacks are emerging every day. 
+This is why there is a growing interest in the field of cybersecurity in using Machine Learning (ML) techniques to automatically detect and prevent certain types of cyber attacks. Since we study in the field of Computer Science and are generally interested in data security, we naturally hear a lot about different cyber attacks happening worldwide, like the recent Deezer attack \cite{purplesec_deezer_data_leak} that saw the data of 228 million users being leaked. Attacks like these can be more than just inconveniences, with some attacks even posing a threat to human like, like those seen during a Ransomware attack on healthcare centers that resulted in delayed treatment for some patients \cite{medical_data_breach}. 
+
+
+However, detecting cyber attacks is not a simple task, and there are a multitude of different types of attacks, each with their own characteristics and patterns. We already learned about some of these attacks in some of the courses we all took, like ``System Security'', but we wanted to learn more about how to automatically detect these attacks using ML approaches. We share our interest in the inner functioning of an Intrusion Detection System (IDS), and we want to learn more about how to build one using ML techniques, as we believe that this could help keep networks more secure.
+
+Unfortunately, there is no single solution to detect all kinds of attacks, and more sophisticated attack patterns are emerging every day. But there are still general patterns found among similar types of attacks, and those can be detected using ML techniques. There is already a lot of research being done in this field and many promising results are being shown, but there is still a lot of work to be done and new attacks are emerging every day. Most approaches group different kinds of similar attacks and categorize them into fields like Reconnasaince attacks, worms or backdoor attacks. While there are still different ways of executing these attacks, they share crucial similarities. 
 
 Therefore, we propose the following hypothesis: 
-``ML techniques can be used to automatically detect certain types of cyber attacks, and can be an effective tool in the fight against cyber crime.''
-
+\begin{mdframed}[backgroundcolor=gray!10, linewidth=1pt]
+\textbf{Hypothesis:} ML techniques can be used to automatically detect certain types of cyber attacks, and can be an effective tool in the fight against cyber crime. These similarities can be used to act against the attacks and prevent harm. 
+\end{mdframed}
 Taking this hypothesis into account, the goal/outcome of our project consists of two parts: 
 \begin{itemize}
     \item To build a model that gives us the ability to automatically detect certain types of cyber attacks, and to evaluate its performance using already established approaches as comparisons. 
