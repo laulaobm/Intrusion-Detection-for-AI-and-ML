@@ -2,7 +2,7 @@
 The following section summarizes and introduces the approaches we chose for the scope of this project. Each subsection describes the plan of one student of the team.
 
 \subsection{Dataset and Preprocessing}
-For all of the following approaches we plan to use the UNSW-NB15\cite{UNSW} dataset, since the papers we evaluated for our project introduced UNSW-NB15.
+For all of the following approaches we plan to use the UNSW-NB15 \cite{UNSW} dataset, since the papers we evaluated for our project introduced UNSW-NB15.
 
 \nextparagraph
 To prepare the training set, as described in Section~\ref{sec:dataset}, we aim to normalize the input data with the help of min-max scaling to make the heterogenous features of the dataset more comparable so that no feature is favoured compared to flags, for instance. After that we will employ Synthetic Minority Oversampling Technique (SMOTE) to address the imbalance problem of favouring the majority class and enable our models to handle minority classes appropriately. With this baseline, the data can be used to train different models or use another preprocessing method to prepare for optimal attack classification.
