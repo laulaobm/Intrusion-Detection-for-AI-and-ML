@@ -37,7 +37,7 @@ This approach can also be applied to the chosen \emph{UNSW-NB15} dataset, as bot
 Wu et al. \cite{intrusion_detection_combined_random_forest} propose an intrusion detection model that specifically addresses the high false detection rates for minority classes caused by imbalanced training data. To balance the dataset, the authors combine K-means clustering with the Synthetic Minority Oversampling Technique (SMOTE). This hybrid sampling approach reduces the influence of outlier samples by clustering minority samples before generating new ones, thereby enriching the features of minority classes.
 
 \nextparagraph
-The core classification relies on an enhanced Random Forest (RF) algorithm[cite: 14, 100]. Rather than using a standard RF, the authors evaluate individual decision trees based on the Area Under the Curve (AUC) index and calculate the structural similarity between them[cite: 101, 103, 169]. Trees with high structural similarity and poor classification performance are discarded, ensuring the final ensemble is both diverse and highly accurate[cite: 192, 200]. 
+The core classification relies on an enhanced Random Forest (RF) algorithm. Rather than using a standard RF, the authors evaluate individual decision trees based on the Area Under the Curve (AUC) index and calculate the structural similarity between them. Trees with high structural similarity and poor classification performance are discarded, ensuring the final ensemble is both diverse and highly accurate. 
 
 
 \nextparagraph
