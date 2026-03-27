@@ -22,10 +22,10 @@ Since our group decided to use the UNSW-NB15 \cite{UNSW} dataset, this project w
 After the complexity reduction with the SMOTE algorithm, I plan to apply feature selection with the help of feature importance based on Random Forest to reduce noise and prepare the data for SVM. The inspiration for this combination of SVM and Random Forest stems from Dey et al. \cite{dey2023new}. Additionally, for tuning the SVM hyperparameter I will use the values described in \cite{dey2023new} to keep the optimization more simple than the Mud Ring optimization.
 
 \subsection{Random Forest-based Approach - Thomas Wobak}
+For my part of the project, I will implement a Random Forest (RF) classifier to detect network intrusions, drawing direct inspiration from the methodology proposed by \cite{intrusion_detection_combined_random_forest}. In their research, they successfully combined an enhanced Random Forest algorithm with the SMOTE oversampling technique to address the severe data imbalance often found in network security datasets, achieving high classification accuracy for both majority and minority classes.
 
-\TODO{THOMAS}
-\begin{itemize}
-    \item for each model: data preprocessing, training, evaluation (grob)
-    \item input -> output ?
-    \item link to papers/related work (e.g. extension? comparison?)
-\end{itemize}
+\nextparagraph
+Using our shared preprocessing pipeline, the input to the RF model will consist of the normalized and SMOTE-balanced UNSW-NB15 feature set. While \cite{wu2022intrusion} evaluated their model on the NSL-KDD dataset, I will adapt their approach to our chosen UNSW-NB15 data. During the training phase, I will utilize the ensemble nature of the Random Forest to handle the high dimensionality of the network traffic parameters. Furthermore, I plan to explore their proposed enhancements, such as evaluating individual decision trees based on the Area Under the Curve (AUC) index and filtering them based on structural similarity to optimize the forest's overall predictive voting process.
+
+\nextparagraph
+The model will output a classification prediction distinguishing between benign traffic and specific cyber attack signatures. Finally, the evaluation phase will measure the model's predictive capabilities using standard classification metrics, including accuracy, precision, recall, and the F1-score, directly mirroring the evaluation criteria used in the referenced study. By comparing these results against the clustering and SVM approaches developed by my peers, we will draw a comprehensive conclusion regarding the effectiveness of ensemble learning in this context.

@@ -183,12 +183,22 @@ In order to detect malicious code in the network, it is necessary to take a look
 \nextparagraph
 Discovering cryptographic attacks or brute-force attacks can be done with looking at the following properties: high consistent traffic (\texttt{sload, dload}), many repeated attemps (\texttt{spkts}), repetitive sessions (\texttt{dur}) and repeated connection attempts (state). 
 
+
 \subsection{Learning Task}
-\TODO{THOMAS}
+
+In the context of this project, the fundamental learning task for our Machine Learning models is framed as a network traffic classification problem. Based on the features extracted from the dataset, the models must learn the underlying patterns and boundaries that separate benign user activity from malicious network intrusions. 
+
+\nextparagraph
+To comprehensively evaluate the capabilities of our chosen algorithms (K-means, SVM, and Random Forest), we divide the learning task into two distinct classification objectives:
+
 \begin{itemize}
-    \item train to recognize attack categories stated in the dataset
-    \item train 3 ML models more general
+    \item \textbf{General Threat Detection (Binary Classification):} The primary task across all three models is to accurately determine whether a given network record represents normal traffic or an attack. The models will take the 49 preprocessed features as input and output a binary label (0 for normal, 1 for attack). This general approach establishes a baseline for how well the models can detect anomalies without needing to understand the specific nature of the threat.
+    
+    \item \textbf{Attack Categorization (Multiclass Classification):} The secondary, more granular task is to train the models to specifically recognize and differentiate between the 9 distinct attack categories present in the dataset (e.g., DoS, Fuzzers, Worms). This requires the models to learn the specific feature combinations and thresholds—such as payload sizes, connection durations, and port usage—that characterize each unique attack vector as outlined in Section~\ref{sec:dataset}.
 \end{itemize}
+
+\nextparagraph
+By tackling both a general binary task and a specific multiclass task, we aim to thoroughly assess the flexibility, accuracy, and practical viability of these models within a real-world Intrusion Detection System.
 
 \subsection{Performance Measure}
 To evaluate the performance of the trained models, we consider different metrics that have been already applied by researcher in numerous papers concerning intrusion detection. Primarily, we derived our metrics for the comparison from \cite{SVM}
