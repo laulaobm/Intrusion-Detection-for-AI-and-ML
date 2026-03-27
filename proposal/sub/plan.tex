@@ -1,27 +1,29 @@
 \section{Plan}
+The following section summarizes and introduces the approaches we chose for the scope of this project. Each subsection describes the plan of one student of the team.
 
-In this project Lisa Tschöscher will focus on applying k-means clustering on the data set, to recognize attacks in network traffic. The approach will be similar like in \cite{10215737}.
-In order to apply  k-means clustering on the chosen dataset the data is going to be preprocessed. Therefore categorical features like IP addresses, protocol, etc. are encoded and normalized (via min-max scaling) because k-means clustering needs numerical values. The training of the model will be mainly done with offline clustering due to the fact that the chosen dataset only provides static data. In addition we will try to simulate streaming data via streaming the dataset one data point at a time into the algorithm. This is done in order to test the online k-means clustering approach of the paper.
-With clustering the input data is going to be partioned into different clusters which indicate whether a data row is normal traffic or attack traffic. Using performance measures like F1-score and precision the results will be evaluated.
+\subsection{Dataset and Preprocessing}
+For all of the following approaches we plan to use the UNSW-NB15\cite{UNSW} dataset, since the papers we evaluated for our project introduced UNSW-NB15.
 
-\subsection{SVM-based approach - Hofer}
+\nextparagraph
+To prepare the training set, as described in Section~\ref{sec:dataset}, we aim to normalize the input data with the help of min-max scaling to make the heterogenous features of the dataset more comparable so that no feature is favoured compared to flags, for instance. After that we will employ Synthetic Minority Oversampling Technique (SMOTE) to address the imbalance problem of favouring the majority class and enable our models to handle minority classes appropriately. With this baseline, the data can be used to train different models or use another preprocessing method to prepare for optimal attack classification.
+
+\subsection{K-means-based Approach - Lisa Tschöscher}
+In this project I will focus on applying k-means clustering on the data set, to recognize attacks in network traffic. The approach will be similar like in \cite{younisse2023empirical}.
+In order to apply  k-means clustering on the chosen dataset the data is going to be preprocessed. Therefore categorical features like IP addresses, protocol, etc. are encoded and normalized (via min-max scaling) because k-means clustering needs numerical values. The training of the model will be mainly done with offline clustering due to the fact that the chosen dataset only provides static data. In addition I will try to simulate streaming data via streaming the dataset one data point at a time into the algorithm. This is done in order to test the online k-means clustering approach of the paper.
+With clustering the input data is going to be partitioned into different clusters which indicate whether a data row is normal traffic or attack traffic. Using performance measures like F1-score and precision the results will be evaluated.
+
+\subsection{SVM-based Approach - Laura Hofer}
 Inspired from Turukmane and Devendiran \cite{SVM}, I'v decided to keep some of the basic architecture of the M-MultiSVM, but replace the used methods with less mathematical ones.
 
-\subsection{Dataset}
-Since our group decided to use the UNSW-NB15\cite{UNSW} dataset, this project will only use one dataset compared to \cite{SVM} and focus more on Data Preprocessing and another hybrid model.
+\nextparagraph
+Since our group decided to use the UNSW-NB15 \cite{UNSW} dataset, this project will only use one dataset compared to \cite{SVM} and focus more on a different data preprocessing  approach and another hybrid model.
 
-\subsubsection{Data Preprocessing}
-Therefore, the class imbalance problem will be treated with SMOTE to reduce complexity.
-To extract important features, Random Forest will be used to form a basis for the hybrid model.
+\nextparagraph
+After the complexity reduction with the SMOTE algorithm, I plan to apply feature selection with the help of feature importance based on Random Forest to reduce noise and prepare the data for SVM. The inspiration for this combination of SVM and Random Forest stems from Dey et al. \cite{dey2023new}. Additionally, for tuning the SVM hyperparameter I will use the values described in \cite{dey2023new} to keep the optimization more simple than the Mud Ring optimization.
 
-\subsubsection{Hybrid Model}
-nur SVM mit RF (soft voting)
-%https://link.springer.com/article/10.1007/s40009-023-01223-0
-
+\subsection{Random Forest-based Approach - Thomas Wobak}
 
 \TODO{THOMAS}
-\TODO{LAURA}
-\TODO{LISA}
 \begin{itemize}
     \item for each model: data preprocessing, training, evaluation (grob)
     \item input -> output ?
