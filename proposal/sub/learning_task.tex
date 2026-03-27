@@ -1,12 +1,9 @@
 \section{Learning Task}
+The following section discusses the dataset as a baseline for our learning task in the first section. The learning task itself will then be introduced in the second section and the third section then addresses the performance measures the ML models are aimed to achieve.
 
 \subsection{Training Experience}
-\TODO{LISA}
-% https://www.kaggle.com/datasets/mrwellsdavid/unsw-nb15?select=UNSW_NB15_training-set.csv
-% https://www.kaggle.com/datasets/hassan06/nslkdd?select=index.html
-
-
-For this project we are going to use the "UNSW\_NB15" dataset \cite{unsw_nb15} which can be found on Kaggle. This data set was used to train and test various systems in order to detect hacking or malicious activity. 
+\label{sec:dataset}
+For this project we are going to use the 'UNSW\_NB15' dataset \cite{UNSW} which can be found on Kaggle. This data set was used to train and test various systems in order to detect hacking or malicious activity. 
 The data set was chosen based on the contained features and the fact that it was used in various papers like \cite{10.1016/j.jnca.2024.103925} and \cite{10.1016/j.jksuci.2024.102164}. Furthermore the same dataset can be found in different Kaggle notebooks, which are also covering intrusion and threat detection. The following notebooks use the same dataset:
 
 \begin{itemize}
@@ -15,7 +12,7 @@ The data set was chosen based on the contained features and the fact that it was
 \end{itemize}
 
 
-
+\nextparagraph
 The data in the set was collected by the Cyber Range Lab of the Australian Centre for Cyber Security (ACCS). They used the tcpdump tool and captured 100 GB of raw network traffic. The set includes 9 different types of attacks:
 
 \begin{enumerate}
@@ -31,7 +28,7 @@ The data in the set was collected by the Cyber Range Lab of the Australian Centr
 \end{enumerate}
 
 
-
+\nextparagraph
 The data was collected by simulating normal activities (browsing, emails, downloads) and fake attacks.  IXIA PerfectStorm was used to generate realistic network traffic including normal traffic and attacks, which were then recorded via tcpdump. Using Argus \& Bro-IDS the raw data was turned into meaningful features. In total the dataset contains 49 features which are described in UNSW-NB15\_features.csv. The features describe network traffic behavior between two endpoints, and each record represents one connection and describes the following aspects of the communication:
 
 \begin{itemize}
@@ -42,7 +39,7 @@ The data was collected by simulating normal activities (browsing, emails, downlo
         \item Protocol type
         \item Service type
     \end{itemize}
-
+    \newpage
     \item \textbf{Time-based features}
     \begin{itemize}
         \item Connection duration
@@ -89,16 +86,20 @@ The data was collected by simulating normal activities (browsing, emails, downlo
     \end{itemize}
 \end{itemize}
 
+\nextparagraph
 Each record has a binary label, 0 indicates normal network traffic and 1 marks an attack.
 In total there is a number of 540,044 records which are stored in the following files: UNSW-NB15\_1.csv, UNSW-NB15\_2.csv, UNSW-NB15\_3.csv and UNSW-NB15\_4.csv. Each row of these files contains all of the 49 features.
 
 \begin{figure}[h]  
     \centering
-    \includegraphics[width=0.6\textwidth]{proposal/images/Row_example.png} 
-    \caption{Example row of the dataset}
+    \includegraphics[width=0.8\textwidth]{../images/Row_example.png} 
+    \caption{Example row of the dataset.}
     \label{fig:meinbild}
 \end{figure}
 
+
+\newpage
+\nextparagraph
 The given picture shows a part of a row in the dataset. The following information can be derived from this row:
 
 \begin{itemize}
@@ -110,60 +111,77 @@ The given picture shows a part of a row in the dataset. The following informatio
     \item State: CON
 \end{itemize}
 
+\nextparagraph
 A partition from this dataset is used as a training set (175.341 entries, UNSW\_NB15\_training-set.csv) and another one is used as testing set (82,332 entries, UNSW\_NB15\_testing-set.csv). The training set was used to teach the model and the testing set includes different attack types and normal rows to check how well the model is trained. 
 
 
 \subsubsection{Attack catgories and recognigtion}
-
-The dataset can be used to recognize different attacks, using the given features. Each attack type has a specific behavior which can be detected in the network using patterns and a combination of features. In the following we provide some examples on how the attacks could be discovered by the models:\\
-
-\textbf{DoS (Denial of Service)}\\
-Such attacks can often be recognized by the flood of network traffic which is produced during the attack. Taking a look at features like \texttt{sload} and \texttt{dload}, which represent the bits per second could point out extremely high traffic rates. Apart from that, the number of exchanged packages (\texttt{spkts, dpkts}) and the data volume (\texttt{sbytes, dbytes}) are able to indicate a Denial of Service attack. Finally an increased number of packet loss (\texttt{sloss, dloss}) is also a hint for malicious behavior.\\
-
-\textbf{Reconnaissance (Scanning)}\\
-This attack aims to find weaknesses in the network. Therefore, the network needs to be scanned, which could be recognized via very short connections (\texttt{dur}), sending very few packets (\texttt{spkts}), the usage of many different ports (\texttt{dsport}), unknown services (\texttt{service}), or very small intervals of connections (\texttt{sintpkt}).\\
-
-\textbf{Exploits}\\
-The main aim behind such an attack is to use vulnerabilities to gain access to a network.  Some indicators for exploits could be the usage of HTTP, FTP or vulnerable services (\texttt{service}),  very complex and unusual requests (\texttt{trans\_depth}), abnormal response sizes (\texttt{res\_bdy\_len}) or unusual session behavior (\texttt{state}).\\
-
-\textbf{Worms}\\
-Worms are malware and have the characteristic, that they are self-spreading across the machine/network. This property can be used to recognize them. Considering the destination IP addresses (\texttt{dstip}) it could be suspicious if there are many different destinations. Furthermore repeated connections (\texttt{spkts, dpkts}) or short repeated session (\texttt{dur}) are also indicators for worms. Considering the bit rate from the source (\texttt{sload}), a consistent outgoing traffic could also be a indicator for such malware.\\
-
-\textbf{Backdoors}\\
-With backdoors, attackers gain hidden access to a system. To detect this type of attack it could be useful to take a look at long lasting connections (\texttt{dur}), unusual or rare services (\texttt{service}) and persistent connections (\texttt{state}).\\
-
-\textbf{Fuzzers}\\
-Fuzzers are used to send random data to break systems. Looking at irregular size traffic (\texttt{sbytes, dbytes}), inconsistent packet sizes (\texttt{smeanz, dmeansz}) or many failed or abnormal states is important in order to detect fuzzers.\\
-
-\textbf{Analysis}\\
-Considering this attack, the main goal of the hacker is to study the system behavior. Therefore, the system needs to be scanned. Such scanning could be detected by longer network connections (\texttt{dur}) or moderate interaction (\texttt{trans\_depth}).\\
-
-\textbf{Shell code}\\
-In order to detect malicious code in the network, it is necessary to take a look at payload-heavy requests (\texttt{sbytes}), small or unusual responses (\texttt{dbytes}), services like HTTP and unusual payload sizes (\texttt{res\_bdy\_len}).\\
-
-\textbf{Generic Attacks}\\
-Discovering cryptographic attacks or brute-force attacks can be done with looking at the following properties: high consistent traffic (\texttt{sload, dload}), many repeated attemps (\texttt{spkts}), repetitive sessions (\texttt{dur}) and repeated connection attempts (state).\\
+The dataset can be used to recognize different attacks, using the given features. Each attack type has a specific behavior which can be detected in the network using patterns and a combination of features. In the following we provide some examples on how the attacks could be discovered by the models:
 
 
-\subsubsection{Alternative dataset}
-In general, we will focus on the previous mentioned UNSW\_NB15 dataset for our project. In case the data quality is not as good as we assumed or we need more training/testing data we chose the NSL-KDD dataset \cite{nsl_kdd_dataset} from Kaggle as an alternative. This data set is also used for network intrusion detection and contains simulated network traffic records. The dataset is provided in two formats:
-\begin{itemize}
-    \item ARFF (structured format)
-    \item TXT/CSV files
-\end{itemize}
+\vspace{4mm}
+\nextparagraph
+\textbf{DoS (Denial of Service)}
 
-This dataset is also divided in training data (KDDTrain+) and testing data (KDDTest+).
-Each row represents a single connection and includes different features like duration, protocol\_type, service and number of failed logs. Furthermore, the attack types (DoS, Probe, R2L, U2R, normal behavior, etc.) are also given in each row. \\
+\nextparagraph
+Such attacks can often be recognized by the flood of network traffic which is produced during the attack. Taking a look at features like \texttt{sload} and \texttt{dload}, which represent the bits per second could point out extremely high traffic rates. Apart from that, the number of exchanged packages (\texttt{spkts, dpkts}) and the data volume (\texttt{sbytes, dbytes}) are able to indicate a Denial of Service attack. Finally an increased number of packet loss (\texttt{sloss, dloss}) is also a hint for malicious behavior.
 
 
+\vspace{4mm}
+\nextparagraph
+\textbf{Reconnaissance (Scanning)}
 
-\begin{itemize}
-    \item UNSW-NB15 dataset choice (specify for training and testing)
-    \item alternative: NSL-KDD dataset
-    \item reason for choice: UNSW-NB15 often used in related work papers
-    \item attack categories incl. how to recognize them
-    \item preprocessing ?
-\end{itemize}
+\nextparagraph
+This attack aims to find weaknesses in the network. Therefore, the network needs to be scanned, which could be recognized via very short connections (\texttt{dur}), sending very few packets (\texttt{spkts}), the usage of many different ports (\texttt{dsport}), unknown services (\texttt{service}), or very small intervals of connections (\texttt{sintpkt}).
+
+\vspace{4mm}
+\nextparagraph
+\textbf{Exploits}
+
+\nextparagraph
+The main aim behind such an attack is to use vulnerabilities to gain access to a network.  Some indicators for exploits could be the usage of HTTP, FTP or vulnerable services (\texttt{service}),  very complex and unusual requests (\texttt{trans\_depth}), abnormal response sizes (\texttt{res\_bdy\_len}) or unusual session behavior (\texttt{state}).
+
+\vspace{4mm}
+\nextparagraph
+\textbf{Worms}
+
+\nextparagraph
+Worms are malware and have the characteristic, that they are self-spreading across the machine/network. This property can be used to recognize them. Considering the destination IP addresses (\texttt{dstip}) it could be suspicious if there are many different destinations. Furthermore repeated connections (\texttt{spkts, dpkts}) or short repeated session (\texttt{dur}) are also indicators for worms. Considering the bit rate from the source (\texttt{sload}), a consistent outgoing traffic could also be a indicator for such malware.
+
+\vspace{4mm}
+\nextparagraph
+\textbf{Backdoors}
+
+\nextparagraph
+With backdoors, attackers gain hidden access to a system. To detect this type of attack it could be useful to take a look at long lasting connections (\texttt{dur}), unusual or rare services (\texttt{service}) and persistent connections (\texttt{state}).
+
+\vspace{4mm}
+\nextparagraph
+\textbf{Fuzzers}
+
+\nextparagraph
+Fuzzers are used to send random data to break systems. Looking at irregular size traffic (\texttt{sbytes, dbytes}), inconsistent packet sizes (\texttt{smeanz, dmeansz}) or many failed or abnormal states is important in order to detect fuzzers.
+
+\vspace{4mm}
+\nextparagraph
+\textbf{Analysis}
+
+\nextparagraph
+Considering this attack, the main goal of the hacker is to study the system behavior. Therefore, the system needs to be scanned. Such scanning could be detected by longer network connections (\texttt{dur}) or moderate interaction (\texttt{trans\_depth}).
+
+\vspace{4mm}
+\nextparagraph
+\textbf{Shell code}
+
+\nextparagraph
+In order to detect malicious code in the network, it is necessary to take a look at payload-heavy requests (\texttt{sbytes}), small or unusual responses (\texttt{dbytes}), services like HTTP and unusual payload sizes (\texttt{res\_bdy\_len}).
+
+\vspace{4mm}
+\nextparagraph
+\textbf{Generic Attacks}
+
+\nextparagraph
+Discovering cryptographic attacks or brute-force attacks can be done with looking at the following properties: high consistent traffic (\texttt{sload, dload}), many repeated attemps (\texttt{spkts}), repetitive sessions (\texttt{dur}) and repeated connection attempts (state). 
 
 \subsection{Learning Task}
 \TODO{THOMAS}
@@ -182,12 +200,7 @@ First and foremost, the models will be compared to each other with the \textbf{A
 With the \textbf{Precision} the number of rightfully identified attacks are compared to the total number of traffic examples classified as an attack to demonstrate the ratio, to which an attack is rightfully classified. To further evaluate the correct recognition of truly positive attacks, the \textbf{Recall} compares the true positives with the number of true positives and false negatives. The trade-off between these to metrics will then be analyzed with the \textbf{F1 score}. 
 
 \nextparagraph
-To get more information on falsely classified attacks, the \textbf{False Positive Rate (FPR)} as well as \textbf{Matthews Correlation Coefficient (MCC)}, \textbf{Detection Rate (DR)} and \textbf{False Alarm Rate (FAR)} are considered. With this metrics, the potential flaws and limitations of the models should be derivable.
+To get more information on falsely classified attacks, the \textbf{False Positive Rate (FPR)} as well as \textbf{Matthews Correlation Coefficient (MCC)}, \textbf{Detection Rate (DR)} and \textbf{False Alarm Rate (FAR)} are considered. With some of these metrics, the potential flaws and limitations of the models should be derivable.
 
 \nextparagraph
 Our goal is to reach comparable results with our models to the papers that inspired our approaches, since our goal is to compare the approaches with the same input data respectively. Therefore the \textbf{DR} should be below 0.150 and all other metrics should be $>=$90\%, or better still, over 95\%.
-
-% The most employed metrics in assessment of anomaly-based
-% IDS include accuracy, recall, precision, false-positive rate
-% (FPR), also regarded as false alarm rate (FAR), f- measure, false-negative rate (FNR), and true-positive rate (TPR)
-% (Fig. 4). 
