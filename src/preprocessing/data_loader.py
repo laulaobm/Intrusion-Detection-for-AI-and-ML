@@ -52,11 +52,11 @@ X_train_multi_resampled.to_parquet('X_train_multi_resampled.parquet')
 X_train_binary_resampled.to_parquet('X_train_binary_resampled.parquet')
 X_test.to_parquet('X_test.parquet')
 
-pd.Series(y_train_multi_resampled, name='target').to_frame().to_parquet('y_train_multi_resampled.parquet')
-pd.Series(y_train_binary_resampled, name='target').to_frame().to_parquet('y_train_binary_resampled.parquet')
+pd.Series(y_train_multi_resampled, name='target').to_frame().to_parquet('../../data/y_train_multi_resampled.parquet')
+pd.Series(y_train_binary_resampled, name='target').to_frame().to_parquet('../../data/y_train_binary_resampled.parquet')
 
-pd.Series(y_test_multi_encoded, name='target').to_frame().to_parquet('y_test_multi.parquet')
-pd.Series(y_test_binary, name='target').to_frame().to_parquet('y_test_binary.parquet')
+pd.Series(y_test_multi_encoded, name='target').to_frame().to_parquet('../../data/y_test_multi.parquet')
+pd.Series(y_test_binary, name='target').to_frame().to_parquet('../../data/y_test_binary.parquet')
 
 #prints done by gemini to examine data
 
