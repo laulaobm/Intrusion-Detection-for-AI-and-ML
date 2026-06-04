@@ -2,9 +2,9 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from imblearn.over_sampling import SMOTE
 import joblib
-
-train_df = pd.read_csv('../../data/UNSW_NB15_training-set.csv')
-test_df = pd.read_csv('../../data/UNSW_NB15_testing-set.csv')
+#No idea why but it seems the csv files are named incorrectly...
+train_df = pd.read_csv('../../data/UNSW_NB15_testing-set.csv')
+test_df = pd.read_csv('../../data/UNSW_NB15_training-set.csv')
 
 train_df = train_df.drop(columns=['id'])
 test_df = test_df.drop(columns=['id'])
@@ -57,3 +57,32 @@ pd.Series(y_train_binary_resampled, name='target').to_frame().to_parquet('y_trai
 
 pd.Series(y_test_multi_encoded, name='target').to_frame().to_parquet('y_test_multi.parquet')
 pd.Series(y_test_binary, name='target').to_frame().to_parquet('y_test_binary.parquet')
+
+#prints done by gemini to examine data
+
+# Displays the first 5 rows to verify that categorical columns are now one-hot encoded
+# and numerical columns are scaled.
+print("--- First 5 Rows of Resampled Data ---")
+print(X_train_multi_resampled.head())
+
+# Pulls 5 random rows to give a broader view of the data structure beyond the top rows.
+print("\n--- 5 Random Rows of Resampled Data ---")
+print(X_train_multi_resampled.sample(5))
+
+# Compares the row counts to show exactly how many synthetic records SMOTE added.
+print("\n--- Dataset Shapes ---")
+print(f"Resampled Training Data Shape: {X_train_multi_resampled.shape}")
+print(f"Test Data Shape: {X_test.shape}")
+
+# Confirms that all 9 specific attack categories now have the exact same number of samples.
+print("\n--- Multi-Class Balance (Attack Categories) ---")
+print(pd.Series(y_train_multi_resampled).value_counts())
+
+# Confirms that the generic 'Normal' vs 'Attack' labels are now perfectly balanced (50/50).
+print("\n--- Binary Class Balance (Normal vs. Attack) ---")
+print(pd.Series(y_train_binary_resampled).value_counts())
+
+# Generates a statistical summary. You should check that the 'min' row is 0.0
+# and the 'max' row is 1.0 for all features, proving Min-Max scaling worked.
+print("\n--- Min-Max Scaling Verification ---")
+print(X_train_multi_resampled.describe())
