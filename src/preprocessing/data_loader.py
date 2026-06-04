@@ -1,5 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
+from imblearn.over_sampling import SMOTE
+import joblib
 
 train_df = pd.read_csv('../../data/UNSW_NB15_training-set.csv')
 test_df = pd.read_csv('../../data/UNSW_NB15_testing-set.csv')
@@ -33,3 +35,25 @@ X_test[numeric_cols] = scaler.transform(X_test[numeric_cols])
 
 print(X_train.shape)
 print(X_test.shape)
+
+smote = SMOTE(random_state=42)
+
+X_train_multi_resampled, y_train_multi_resampled = smote.fit_resample(X_train, y_train_multi_encoded)
+
+print(X_train.shape)
+print(X_train_multi_resampled.shape)
+
+X_train_binary_resampled, y_train_binary_resampled = smote.fit_resample(X_train, y_train_binary)
+
+joblib.dump(scaler, 'min_max_scaler.pkl')
+joblib.dump(label_encoder, 'label_encoder.pkl')
+
+X_train_multi_resampled.to_parquet('X_train_multi_resampled.parquet')
+X_train_binary_resampled.to_parquet('X_train_binary_resampled.parquet')
+X_test.to_parquet('X_test.parquet')
+
+pd.Series(y_train_multi_resampled, name='target').to_frame().to_parquet('y_train_multi_resampled.parquet')
+pd.Series(y_train_binary_resampled, name='target').to_frame().to_parquet('y_train_binary_resampled.parquet')
+
+pd.Series(y_test_multi_encoded, name='target').to_frame().to_parquet('y_test_multi.parquet')
+pd.Series(y_test_binary, name='target').to_frame().to_parquet('y_test_binary.parquet')
