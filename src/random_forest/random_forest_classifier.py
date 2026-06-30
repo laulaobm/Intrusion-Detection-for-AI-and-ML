@@ -3,8 +3,13 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from src.utils.data_loader import load_preprocessed_data
 from forest_pruner import run_phase_2
 
-def train_random_forest(X_train, y_train, random_state=42):
-    rf_model = RandomForestClassifier(random_state=random_state)
+def train_random_forest(X_train, y_train, random_state=42, max_depth=20):
+    rf_model = RandomForestClassifier(
+        random_state=random_state,
+        max_depth=max_depth,
+        max_samples=0.8,
+        n_estimators=100
+    )
     rf_model.fit(X_train, y_train)
     return rf_model
 
@@ -57,7 +62,7 @@ def run_baseline_pipeline(task_type):
 if __name__ == "__main__":
     rf_bin_model, bin_metrics = run_baseline_pipeline(task_type='binary')
 
-    pruned_bin_model, remaining_bin_trees = run_phase_2(rf_bin_model, task_type='binary')
+    pruned_bin_model, remaining_bin_trees = run_phase_2(rf_bin_model, task_type='binary', sim_threshold=0.85)
 
     _, X_test_bin, _, y_test_bin = load_preprocessed_data(task_type='binary')
     y_pred_bin_pruned = pruned_bin_model.predict(X_test_bin)
@@ -69,7 +74,7 @@ if __name__ == "__main__":
 
     rf_multi_model, multi_metrics = run_baseline_pipeline(task_type='multi')
 
-    pruned_multi_model, remaining_multi_trees = run_phase_2(rf_multi_model, task_type='multi')
+    pruned_multi_model, remaining_multi_trees = run_phase_2(rf_multi_model, task_type='multi', sim_threshold=0.90)
 
     _, X_test_multi, _, y_test_multi = load_preprocessed_data(task_type='multi')
     y_pred_multi_pruned = pruned_multi_model.predict(X_test_multi)

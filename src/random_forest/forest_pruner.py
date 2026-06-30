@@ -87,7 +87,7 @@ def prune_random_forest(rf_model, X_val, y_val, is_binary=True, auc_threshold=0.
     return rf_model, len(trees_to_keep_indices)
 
 
-def run_phase_2(rf_model, task_type):
+def run_phase_2(rf_model, task_type, auc_threshold=0.5, sim_threshold=0.85):
     is_binary = (task_type == 'binary')
     _, X_test, _, y_test = load_preprocessed_data(task_type=task_type)
 
@@ -97,7 +97,9 @@ def run_phase_2(rf_model, task_type):
         rf_model,
         X_test_np,
         y_test,
-        is_binary=is_binary
+        is_binary=is_binary,
+        auc_threshold=auc_threshold,
+        sim_threshold=sim_threshold
     )
 
     return pruned_model, remaining_trees
