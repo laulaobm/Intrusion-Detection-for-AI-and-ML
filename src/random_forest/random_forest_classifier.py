@@ -2,7 +2,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, matthews_corrcoef
 from src.utils.data_loader import load_preprocessed_data
 from forest_pruner import run_phase_2
-
+from result_corrector import ResultCorrector
 def train_random_forest(X_train, y_train, random_state=42, max_depth=20):
     rf_model = RandomForestClassifier(
         random_state=random_state,
@@ -61,22 +61,25 @@ def run_baseline_pipeline(task_type):
 
 if __name__ == "__main__":
     rf_bin_model, bin_metrics = run_baseline_pipeline(task_type='binary')
-
     pruned_bin_model, remaining_bin_trees = run_phase_2(rf_bin_model, task_type='binary', sim_threshold=0.85)
 
     _, X_test_bin, _, y_test_bin = load_preprocessed_data(task_type='binary')
+
     y_pred_bin_pruned = pruned_bin_model.predict(X_test_bin)
 
-    pruned_bin_metrics = evaluate_predictions(y_test_bin, y_pred_bin_pruned, is_binary=True)
+    corrector = ResultCorrector()
+    y_pred_bin_corrected = corrector.correct_binary(X_test_bin, y_pred_bin_pruned)
+
+    corrected_bin_metrics = evaluate_predictions(y_test_bin, y_pred_bin_corrected, is_binary=True)
 
     print(f"Trees remaining in Binary model after pruning: {remaining_bin_trees}")
-    print_evaluation_metrics("Pruned Binary Model", pruned_bin_metrics, is_binary=True)
+    print_evaluation_metrics("Corrected Binary Model", corrected_bin_metrics, is_binary=True)
 
     rf_multi_model, multi_metrics = run_baseline_pipeline(task_type='multi')
-
     pruned_multi_model, remaining_multi_trees = run_phase_2(rf_multi_model, task_type='multi', sim_threshold=0.90)
 
     _, X_test_multi, _, y_test_multi = load_preprocessed_data(task_type='multi')
+
     y_pred_multi_pruned = pruned_multi_model.predict(X_test_multi)
 
     pruned_multi_metrics = evaluate_predictions(y_test_multi, y_pred_multi_pruned, is_binary=False)
