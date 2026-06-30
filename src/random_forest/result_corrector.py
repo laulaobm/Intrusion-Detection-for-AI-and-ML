@@ -3,17 +3,12 @@ import numpy as np
 
 class ResultCorrector:
     def __init__(self):
-        pass
+        self.attack_matrix = None
 
-    def correct_binary(self, X_test_df, y_pred):
-        corrected_pred = y_pred.copy()
-
-        benign_override = (
-                (corrected_pred == 1) &
-                (X_test_df.get('sbytes', 1.0) < 1e-4) &
-                (X_test_df.get('dbytes', 1.0) < 1e-4) &
-                (X_test_df.get('dur', 1.0) < 1e-4)
-        )
-        corrected_pred[benign_override] = 0
-
+    def correct_binary(self, rf_model, X_test, threshold=0.65):
+        probas = rf_model.predict_proba(X_test)[:, 1]
+        corrected_pred = (probas >= threshold).astype(int)
         return corrected_pred
+
+    def correct_multiclass(self, rf_model, X_test_df, y_pred):
+        pass

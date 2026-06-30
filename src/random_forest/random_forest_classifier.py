@@ -65,10 +65,8 @@ if __name__ == "__main__":
 
     _, X_test_bin, _, y_test_bin = load_preprocessed_data(task_type='binary')
 
-    y_pred_bin_pruned = pruned_bin_model.predict(X_test_bin)
-
     corrector = ResultCorrector()
-    y_pred_bin_corrected = corrector.correct_binary(X_test_bin, y_pred_bin_pruned)
+    y_pred_bin_corrected = corrector.correct_binary(pruned_bin_model, X_test_bin, threshold=0.65)
 
     corrected_bin_metrics = evaluate_predictions(y_test_bin, y_pred_bin_corrected, is_binary=True)
 
