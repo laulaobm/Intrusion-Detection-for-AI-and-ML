@@ -106,7 +106,6 @@ if __name__ == "__main__":
     print(f"Trees remaining in Multiclass model after pruning: {remaining_multi_trees}")
     print_evaluation_metrics("Corrected Multiclass Model", corrected_multi_metrics, is_binary=False)
 
-    # --- Visualization ---
     labels = label_encoder.classes_
     plot_confusion_matrix(y_test_multi, y_pred_multi_corrected, labels=labels,
                           title="Multiclass Attack Classification Matrix")

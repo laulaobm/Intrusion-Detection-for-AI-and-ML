@@ -10,21 +10,22 @@ class ResultCorrector:
         corrected_pred = (probas >= threshold).astype(int)
         return corrected_pred
 
-    def correct_multiclass(self, X_test_df, y_pred_encoded, label_encoder):
-        corrected_pred = y_pred_encoded.copy()
+    def correct_multiclass(self, rf_model, X_test_df, label_encoder, confidence_threshold=0.55):
+        probas = rf_model.predict_proba(X_test_df)
+        max_probas = np.max(probas, axis=1)
+        raw_predictions = np.argmax(probas, axis=1)
 
-        # Example logic based on Section 2.1.1
-        # High sload/dload often indicates DoS or Generic attacks [cite: 127, 155]
-        dos_mask = (X_test_df['sload'] > 0.8) & (X_test_df['dload'] > 0.8)
+        corrected_pred = raw_predictions.copy()
 
-        # Reconnaissance often has very short duration [cite: 131]
-        recon_mask = (X_test_df['dur'] < 0.01) & (X_test_df['spkts'] < 0.02)
+        uncertain_mask = max_probas < confidence_threshold
 
-        # Mapping rules
-        recon_idx = np.where(label_encoder.classes_ == 'Reconnaissance')[0][0]
         dos_idx = np.where(label_encoder.classes_ == 'DoS')[0][0]
+        recon_idx = np.where(label_encoder.classes_ == 'Reconnaissance')[0][0]
 
-        corrected_pred[dos_mask] = dos_idx
-        corrected_pred[recon_mask] = recon_idx
+        dos_condition = (X_test_df.get('sload', 0) > 0.95) & (X_test_df.get('dload', 0) > 0.95) & uncertain_mask
+        recon_condition = (X_test_df.get('dur', 1) < 1e-4) & (X_test_df.get('spkts', 1) < 1e-4) & uncertain_mask
+
+        corrected_pred[dos_condition] = dos_idx
+        corrected_pred[recon_condition] = recon_idx
 
         return corrected_pred
