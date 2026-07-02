@@ -98,8 +98,7 @@ if __name__ == "__main__":
     # Get raw predictions first
     y_pred_multi_pruned = pruned_multi_model.predict(X_test_multi)
 
-    y_pred_multi_corrected = corrector.correct_multiclass(X_test_multi, y_pred_multi_pruned, label_encoder)
-
+    y_pred_multi_corrected = corrector.correct_multiclass(pruned_multi_model, X_test_multi, label_encoder)
     # Evaluate the corrected predictions
     corrected_multi_metrics = evaluate_predictions(y_test_multi, y_pred_multi_corrected, is_binary=False)
 
