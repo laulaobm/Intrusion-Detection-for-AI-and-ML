@@ -2,7 +2,7 @@ from sklearn.cluster import KMeans
 
 import sys
 from pathlib import Path
-
+import wandb
 project_root = Path(__file__).resolve().parents[2]
 sys.path.append(str(project_root))
 
@@ -17,6 +17,14 @@ from sklearn.metrics import (
     f1_score,
     confusion_matrix
 )
+
+wandb.init(project="intrusion-detection", name="offline-kmeans-run")
+wandb.config.update({
+    "k": 2,
+    "n_init": 10,
+    "random_state": 42,
+    "algorithm": "Offline K-Means"
+})
 
 # generate modell
 k = 2 # distinguish between 0 normal and 1 attack
@@ -80,4 +88,11 @@ print(cm)
 print(kmeans.cluster_centers_)
 
 
+wandb.log({
+    "Accuracy": accuracy_score(y_test, y_pred),
+    "Precision": precision_score(y_test, y_pred),
+    "Recall": recall_score(y_test, y_pred),
+    "F1-score": f1_score(y_test, y_pred)
+})
 
+wandb.finish()

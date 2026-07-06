@@ -13,7 +13,7 @@ import numpy as np
 import sys
 from pathlib import Path
 import time
-
+import wandb
 
 # PATH SETUP
 project_root = Path(__file__).resolve().parents[2]
@@ -38,12 +38,20 @@ print(f"   ➜ Stream size: {len(X_stream)} samples\n")
 
 
 # INIT SYSTEM
-
+wandb.init(project="intrusion-detection", name="online-kmeans-stream")
 print("[INIT] Starting OnlineKMeans system...")
 model = OnlineKMeans(k=2, fr=1.0)
 monitor = StreamMonitor()
 drift_detector = DriftDetector()
-
+# --- Log Hyperparameters ---
+wandb.config.update({
+    "k": model.k,
+    "fr": model.fr,
+    "drift_threshold": drift_detector.threshold,
+    "window_size": monitor.window_size,
+    "batch_size": 50,
+    "algorithm": "Online K-Means"
+})
 print(f"   ➜ k = {model.k}")
 print(f"   ➜ fr = {model.fr}")
 print("   ➜ Drift threshold =", drift_detector.threshold)
@@ -94,7 +102,12 @@ for i in range(0, len(X_stream), batch_size):
     print(f"   ➜ avg cluster count: {monitor.history['cluster_count'][-1]}")
     print(f"   ➜ entropy (chaos):   {monitor.history['entropy'][-1]:.4f}")
     print(f"   ➜ avg distance:      {monitor.history['avg_distance'][-1]:.4f}")
-
+    wandb.log({
+        "Stream/Cluster_Count": monitor.history['cluster_count'][-1],
+        "Stream/Entropy": monitor.history['entropy'][-1],
+        "Stream/Avg_Distance": monitor.history['avg_distance'][-1],
+        "Stream/Batch_Index": batch_idx
+    })
     # --- drift detection ---
     if drift_detector.check(monitor):
         print("\n DRIFT DETECTED!")
@@ -147,7 +160,15 @@ cm = confusion_matrix(y_test, y_pred)
 print("\nConfusion Matrix:")
 print(cm)
 
+# --- W&B Final Evaluation Logging ---
+wandb.log({
+    "Final_Evaluation/Accuracy": accuracy_score(y_test, y_pred),
+    "Final_Evaluation/Precision": precision_score(y_test, y_pred),
+    "Final_Evaluation/Recall": recall_score(y_test, y_pred),
+    "Final_Evaluation/F1-score": f1_score(y_test, y_pred)
+})
 
+wandb.finish()
 
 tn, fp, fn, tp = cm.ravel()
 
