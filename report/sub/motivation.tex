@@ -1,8 +1,11 @@
 \section{Motivation}
 The increasing number and complexity of cyber attacks has made network security a critical challenge in modern digital infrastructures. Traditional rule-based intrusion detection systems are often unable to keep up with evolving attack patterns, which motivates the use of Machine Learning (ML) techniques for automated and adaptive detection.
 
+\nextparagraph
 Intrusion Detection Systems (IDS) aim to distinguish between normal network traffic and malicious activity, but the diversity of attack types and the high dimensionality of network data make this task difficult. In addition, class imbalance and continuously changing attack strategies further complicate reliable detection. Therefore, more robust and data-driven approaches are required to improve detection performance and reduce false alarms.
 
+\nextparagraph
 In this project, we investigate the use of three ML-based approaches for intrusion detection on the UNSW-NB15 dataset \cite{UNSW}: K-Means clustering\cite{kMeans}, Support Vector Machines (SVM)\cite{SVM}, and Random Forests\cite{intrusion_detection_combined_random_forest}. Each method is applied to both binary classification (normal vs. attack) and multiclass classification (specific attack categories). The models are trained on preprocessed and normalized network traffic data, with additional techniques such as SMOTE applied to address class imbalance.
 
+\nextparagraph
 The goal of this project is to evaluate and compare the effectiveness of these approaches using standard performance metrics such as accuracy, precision, recall, F1-score, false positive rate, and detection rate. By analyzing the results, we aim to identify the strengths and limitations of each method and assess their suitability for real-world intrusion detection scenarios.
