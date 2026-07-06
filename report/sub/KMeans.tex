@@ -1,0 +1,131 @@
+\section{K-Means (Lisa Tschöscher) }
+This part was worked on by Lisa Tschöscher (Matnr: 12203513). The goal was to apply K-Means clustering on the dataset to recognize attacks in the network traffic. This part is implemented entirely in Python using NumPy, Pandas and scikit-learn. Offline clustering relies on the K-Means implementation provided by scikit-learn, while the online algorithm was implemented manually following the description presented by \cite{kMeans}.
+
+\subsection{Offline K-Means}
+The offline K-Means model is initialized as follows:
+
+\begin{lstlisting}[language=Python]
+kmeans = KMeans(
+    n_clusters=2,
+    random_state=42,
+    n_init=10
+)
+\end{lstlisting}
+
+After training, every sample is assigned to one of the two clusters. Therefore, the dataset is transformed into a binary classification problem with only two groups: namely cluster 0 (normal traffic) and cluster 1 (attack traffic). Since K-Means only returns cluster indices and not class labels, a mapping between clusters and the actual classes must be established. To analyze the composition of each cluster, the predicted cluster assignments are combined with the true labels. By grouping the samples according to their cluster, it is possible to determine whether a cluster mainly contains normal or malicious traffic.
+
+Since clustering algorithms do not produce class labels, a majority voting strategy is used to associate each cluster with either the normal or attack class. The labels are only used later for evaluation.\\
+
+\begin{lstlisting}
+    cluster_to_class = {}
+    
+    for cluster_id in range(2):
+        cluster_labels = y_train[train_clusters == cluster_id]
+        majority_class = cluster_labels.mode()[0]
+        cluster_to_class[cluster_id] = majority_class
+\end{lstlisting}
+This mapping is then applied to classify the unseen test data. Further the predicted cluster indices are converted into class labels using the previously created mapping. Finally the model performance is evaluated using standard classification metrics, which can be seen in the evaluation section.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c|c|c}
+\hline
+\textbf{Cluster} & \textbf{True Label} & \textbf{Number of Samples} \\
+\hline
+0 & 0 (Normal) & 81,456 \\
+0 & 1 (Attack) & 40,825 \\
+1 & 1 (Attack) & 78,516 \\
+1 & 0 (Normal) & 37,885 \\
+\hline
+\end{tabular}
+\caption{Distribution of true labels within each cluster (Offline K-Means)}
+\end{table}
+
+The cluster distribution shows that the K-Means algorithm partially succeeds in separating normal and malicious network traffic. Cluster 0 contains a higher proportion of normal samples (81,456) compared to attacks (40,825), while Cluster 1 contains more attack samples (78,516) than normal samples (37,885).
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lc}
+\hline
+\textbf{Metric} & \textbf{Score} \\
+\hline
+Accuracy & 0.6838 \\
+Precision & 0.7361 \\
+Recall & 0.6637 \\
+F1-score & 0.6980 \\
+\hline
+\end{tabular}
+\caption{Performance of Offline K-Means on intrusion detection task}
+\end{table}
+
+
+In general, the results indicate moderate classification performance.
+The precision (0.736) shows that when the model predicts an attack, it is correct in about 74\% of cases. This means the number of false alarms is relatively controlled. The recall (0.664) is lower, meaning that approximately one third of actual attacks are not detected and are classified as normal traffic. This is a critical limitation for intrusion detection systems. The F1-score (0.698) reflects a balance between precision and recall, confirming that the model performs consistently but not strongly. The overall accuracy of 68.38\% suggests that while clustering captures some structure in the data, it is not sufficient for reliable real-world intrusion detection on its own.
+
+
+\subsection{Online K-Means}
+The custom Online K-Means implementation follows the algorithm presented in the reference paper. Initially, the first k samples become cluster centers. Every subsequent sample computes its Euclidean distance to all existing centers. Depending on this distance and the parameter fr, a new cluster is created probabilistically or the sample joins its nearest cluster.
+
+Unlike traditional batch-based clustering, the model processes data in a streaming fashion, allowing it to adapt continuously to incoming observations. This is particularly important in intrusion detection systems (IDS), where network behavior evolves over time (concept drift).
+
+The system is composed of four main modules:
+\begin{itemize}
+    \item Online clustering model (online\_kMeans.py)
+    \item Stream monitoring module (stream\_monitor.py)
+    \item Drift detection module (drift\_detector.py)
+    \item Execution pipeline (run\_stream.py)
+\end{itemize}
+
+In the online clustering model the presented algorihtm of \cite{kMeans} is used in order to generate clusters. Further the stream monitoring module is used to track the statistical behavior of the clustering system over time. It collects metrics per batch to observe the system stability and detect anomalies. The drift detection module compares recent behavior to historical behavior in order to detect drifts. A drift would for example indicate changes in network behavior or new attack patterns. Finally run\_stream.py runs the entire system and prints real-time diagnostics at the end. The following workflow is applied:
+\begin{enumerate}
+    \item Data loading
+    \item Model initialization
+    \item Stream processing of each batch
+    \begin{enumerate}
+        \item online clustering
+        \item assign labels
+        \item compute distances
+        \item update metrics
+        \item check for drifts
+    \end{enumerate}
+\end{enumerate}
+
+
+The proposed Online K-Means model was evaluated on a streaming intrusion detection dataset. After processing the full data stream, the model converged to 300 cluster centers. Table~\ref{tab:metrics} summarizes the final classification performance.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lc}
+\hline
+\textbf{Metric} & \textbf{Value} \\
+\hline
+Accuracy  & 0.8252 \\
+Precision & 0.9258 \\
+Recall    & 0.7420 \\
+F1-score  & 0.8238 \\
+\hline
+\end{tabular}
+\caption{Final classification performance of the Online K-Means model}
+\label{tab:metrics}
+\end{table}
+
+The results indicate a strong precision of 0.93, meaning that predicted attacks are highly reliable and false alarms remain limited. However, the recall of 0.74 indicates that a significant portion of attacks is not detected, which is a known limitation of clustering-based intrusion detection systems.
+
+The F1-score of 0.82 reflects a balanced performance between detection capability and false alarm rate. The overall accuracy of 82.5\% shows that the model captures meaningful structure in the data stream, despite operating in a fully unsupervised and incremental learning setting.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\hline
+ & \textbf{Predicted Normal} & \textbf{Predicted Attack} \\
+\hline
+\textbf{Actual Normal}  & 34306 & 2694 \\
+\textbf{Actual Attack}  & 11696 & 33636 \\
+\hline
+\end{tabular}
+\caption{Confusion matrix of Online K-Means classification}
+\label{tab:confusion}
+\end{table}
+
+The confusion matrix reveals that the model is more effective at correctly identifying attack traffic than normal traffic. A total of 33,636 attack instances were correctly classified, while 11,696 attacks were missed and labeled as normal traffic. Overall, the results demonstrate that Online K-Means clustering is capable of capturing meaningful structures in streaming network data, but its performance is limited when used as a standalone detection mechanism.
