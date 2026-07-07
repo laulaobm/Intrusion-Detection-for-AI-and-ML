@@ -20,6 +20,8 @@
 \usepackage{fancyvrb}
 \usepackage{listings}
 \usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \usepackage{listings}
 \usepackage{xcolor}
@@ -92,43 +94,18 @@
 \end{titlepage}
 
 \newpage
-\tableofcontents
 
-\section{Assignment}
-\begin{itemize}
-  \item 6-8 pages
-  \item structured as a research paper
-  \item sections can be modified
-\end{itemize}
+\input{sub/motivation}
+\input{sub/data}
+\input{sub/theoretical}
+\input{sub/random_forest}
+\input{sub/KMeans}
+\input{sub/svm}
+\input{sub/conclusion}
 
-Motivation: Describe the problem you are solving, explain why it is important, and provide a short summary of your methods and obtained results.
+\section{Artifact}
+The source code of this project is available on GitHub\footnote{\url{https://github.com/laulaobm/Intrusion-Detection-for-AI-and-ML}}. The execution of the code can be seen at Weights \& Biases \footnote{\url{https://wandb.ai/thomas-wobak1-alpen-adria-universit-t-klagenfurt/intrusion-detection/overview}}.
 
-\nextparagraph
-Data: Describe the data you are using in the project and provide examples. What kind of data are you using? Where does it come from? What are the properties of your data, like balance, missing values, scale, etc., and what are you going to do about them? What kind of preprocessing, filtering, augmentation, or other manipulations are you applying in the project?  
-
-\nextparagraph
-Theoretical part: literature overview: which models from the literature are suitable for this problem, given your data, and why? Which algorithms can be used to train them? How are these models related to your hypothesis? Present an overview of your approach: what steps are executed in the learning pipeline? Which hyperparameters of the learning algorithm are available, and how can they influence the results? You must show that you applied methods considered during the semester to the selected problem. Feel free to include any figures or tables helping to describe your method and compare it with others. If you use information from other sources, please cite it properly.
-
-\nextparagraph
-Implementation: How did you implement your approach? Which tools were used? show interesting snippets or present your algorithms
-
-\nextparagraph
-Training and Evaluation: Describe your training process and provide a link to your training logs on the Weights \& Biases platform (make your project public and paste the shareable link into the report text). Present and visualize the results of your evaluation, explain what your results mean, why your approach was successful, and why it was not. Compare your solutions from the group and relate the results to a baseline from the literature, blogs, Kaggle, etc.
-
-\nextparagraph
-Conclusions: How can you evaluate the results of your work? What would you recommend for future steps?
-
-\include{sub/motivation}
-\include{sub/data}
-\include{sub/theoretical}
-\include{sub/implementation}
-\include{sub/random_forest}
-\include{sub/KMeans}
-\include{sub/train_eval}
-\include{sub/conclusion}
-\cite{5999520}
-
-\newpage
 \bibliographystyle{plain}
 \addcontentsline{toc}{section}{References}  
 \bibliography{reference}
