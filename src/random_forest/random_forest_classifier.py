@@ -112,7 +112,7 @@ if __name__ == "__main__":
 
     _, X_test_multi, _, y_test_multi = load_preprocessed_data(task_type='multi')
 
-    label_encoder = joblib.load('label_encoder.pkl')
+    label_encoder = joblib.load('../preprocessing/label_encoder.pkl')
 
     y_pred_multi_pruned = pruned_multi_model.predict(X_test_multi)
 
@@ -132,6 +132,5 @@ if __name__ == "__main__":
         "Multiclass/Remaining_Trees": remaining_multi_trees
     })
 
-    wandb.log({"Multiclass_Confusion_Matrix": wandb.Image("confusion_matrix_random_forest.png")})
 
     wandb.finish()
