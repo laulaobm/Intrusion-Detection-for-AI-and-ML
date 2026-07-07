@@ -307,6 +307,9 @@ def predict_svm(model, X_test, threshold=-0.35):
     if isinstance(model, GPUMulticlassSVC):
         return model.predict(X_test)
 
+    if hasattr(model, "classes_") and len(model.classes_) > 2:
+        return model.predict(X_test)
+
     if "cuml" in str(type(model)):
         X_test_gpu = cudf.from_pandas(X_test.astype(np.float32))
         decision_scores = model.decision_function(X_test_gpu)
@@ -410,9 +413,6 @@ def run_hierarchical_pipeline():
     attack_mask = (y_train_multi != normal_encoded_val)
     X_train_multi_attacks = X_train_multi[attack_mask]
     y_train_multi_attacks = y_train_multi[attack_mask]
-
-    print(
-        f"Training-Samples vor Filterung: {len(X_train_multi)} | Nach Filterung (Nur Angriffe): {len(X_train_multi_attacks)}")
 
     X_train_multi_sel, X_test_multi_sel, top_features_multi, rf_model_multi = select_features_with_rf(
         X_train_multi_attacks, y_train_multi_attacks, X_test_multi, top_k=RF_TOP_K_MULTI
